@@ -14,7 +14,8 @@ def _(mo):
 def _():
     import marimo as mo
     import polars as pl
-    return mo, pl
+    import matplotlib.pyplot as plt
+    return mo, pl, plt
 
 
 @app.cell(hide_code=True)
@@ -69,6 +70,30 @@ def _(pl):
                          "Obligationsrente, 30 år"],
            "Rentesats": [0.00, 0.5, 1.5, 3.00, 4.50, 5.50, 6.25, 6.75]}
     df = pl.DataFrame(data)
+    return (df,)
+
+
+@app.cell
+def _(df, plt):
+    # Preserve order by taking lists directly from the DataFrame
+    x = df["Produkter"].to_list()
+    y = df["Rentesats"].to_list()
+
+    plt.figure(figsize=(12, 5))
+    plt.plot(x, y, marker="o")  # no explicit colors/styles per your request
+    plt.xlabel("Produkter")
+    plt.ylabel("Rentesats")
+    plt.title("Rentesatser pr. produkt (linjediagram, original rækkefølge)")
+    plt.xticks(rotation=25, ha="right")
+    plt.grid(True, axis="y", linestyle="--", alpha=0.4)
+    plt.tight_layout()
+    plt.show()
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## Opgave 1.4""")
     return
 
 
