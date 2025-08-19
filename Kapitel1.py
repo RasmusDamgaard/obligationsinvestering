@@ -31,7 +31,14 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.md(r"""svar""")
+    mo.md(
+        r"""
+    * Inflation
+    * Forventet fremtidig inflation
+    * Vækst økonomien og fremtidig vækst
+    * 
+    """
+    )
     return
 
 
@@ -48,7 +55,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.md(r"""svar""")
+    mo.md(r"""Høj produtivitetstilvækst $\rightarrow$ høj rente""")
     return
 
 
@@ -93,7 +100,129 @@ def _(df, plt):
 
 @app.cell
 def _(mo):
-    mo.md(r"""## Opgave 1.4""")
+    mo.md(
+        r"""
+    ## Opgave 1.4
+    Kan man sammenligne effektive rentesater for penge- og obligationsmarkedet?
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar:
+    Det skal man være varsom med, da den effektive rentesats er en slags aritmetisk gennemsnitsforrentning der ikke tager højde for forskelle i løbetider.
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.5
+    Den effektive rente tager hensyn til rentes-rente effekten. Hvis den pålydende rente er 5% og der sker rentetilskrivning 4 gange om året, bliver den effektive rente da højere eller lavere end 5%?
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar:
+    Den bliver højere. 
+    Den kan ses af: 
+    $$\beta$$ 
+    """
+    )
+    return
+
+
+@app.cell
+def _():
+    R = (1+0.05/4)**(4)
+    print("Hvilket er lig med: ",R)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.6
+    Bestem den direkte rente på en obligation med en pålydende kuponrente på 7%, der handles til kurs 105.
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    Svar:
+    $$r_d = \frac{r}{D}$$
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.7
+    Afgør hvorvidt den effektive rente for obligationen i opgave 1.6 er højere eller lavere end obligationens direkte rente.
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asdas
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.8
+    Bestem den nominelle rente, der kan forventes at være gældende om 1 år, hvis følgende fire scenarier er mulige: 
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    $$
+    \begin{table}[]
+    \begin{tabular}{lll}
+    Scenarier                    & Rente & Sandsynlighed \\ \hline
+    Lav vækst, ej ØMU deltagelse & 5\%   & 20\%          \\
+    Lav vækst, ØMU deltagelse    & 3\%   & 30\%          \\
+    Høj vækst, ej ØMU deltagelse & 8\%   & 10\%          \\
+    Høj vækst, ØMU deltagelse    & 6\%   & 40\%         
+    \end{tabular}
+    \end{table}
+    $$ 
+    """
+    )
     return
 
 
