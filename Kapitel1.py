@@ -36,7 +36,7 @@ def _(mo):
     * Inflation
     * Forventet fremtidig inflation
     * Vækst økonomien og fremtidig vækst
-    * 
+    *
     """
     )
     return
@@ -138,7 +138,7 @@ def _(mo):
     ### Svar:
     Den bliver højere. 
     Den kan ses af: 
-    $$\beta$$ 
+    $$\beta$$
     """
     )
     return
@@ -200,29 +200,327 @@ def _(mo):
     mo.md(
         r"""
     ## Opgave 1.8
-    Bestem den nominelle rente, der kan forventes at være gældende om 1 år, hvis følgende fire scenarier er mulige: 
+    Bestem den nominelle rente, der kan forventes at være gældende om 1 år, hvis følgende fire scenarier er mulige:
     """
     )
     return
 
 
 @app.cell
+def _(pl):
+    data1_8 = [["Lav vækst, ØMU deltagelse",0.05,0.2],
+            ["Lav vækst, ØMU deltagelse", 0.03, 0.3], 
+            ["Høj vækst, ej ØMU deltagelse", 0.08, 0.1],
+            ["Høj vækst, ØMU deltagelse", 0.06, 0.4]]
+    df1_8 = pl.DataFrame(data1_8, schema=["Scenarier", "Rente", "Sandsynlighed"], orient="row")
+    df1_8
+    return (df1_8,)
+
+
+@app.cell
+def _(df1_8, pl):
+    # sumproduct = Σ (a[i] * b[i])
+    sumprod = df1_8.select( (pl.col("Rente") * pl.col("Sandsynlighed")).sum().alias("sumproduct") )
+    # -> shape: (1, 1); use .item() to get the scalar:
+    sumprod_value = sumprod.item()
+    print("E(r): ",sumprod_value)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.9""")
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-    $$
-    \begin{table}[]
-    \begin{tabular}{lll}
-    Scenarier                    & Rente & Sandsynlighed \\ \hline
-    Lav vækst, ej ØMU deltagelse & 5\%   & 20\%          \\
-    Lav vækst, ØMU deltagelse    & 3\%   & 30\%          \\
-    Høj vækst, ej ØMU deltagelse & 8\%   & 10\%          \\
-    Høj vækst, ØMU deltagelse    & 6\%   & 40\%         
-    \end{tabular}
-    \end{table}
-    $$ 
+    ### Spørgsmål a.
+    Økonomiens produktionsmulighedskurve er givet ved: 
     """
     )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ C_2 = 105 - 0.0105\cdot C_1^2 $$""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Illustrer produktionsmulighedskurven grafisk.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asd
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål b.
+    Hvilken real vækstrate er der i økonomien mellem de to perioder, hvis hele produktionen i periode 1 investeres?
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asd
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål c.
+    Forbrugerens indifferenskurvesæt kan repræsenteres ved følgende tre funktioner: 
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    $$ I_1: C_2=3536 \cdot C_1^{-1} - 8.4 \\
+    I_2: C_2 = 4536\cdot C_1^{-1} - 8.4 \\
+    I_3: C_2 = 5536 \cdot C_1^{-1} - 8.4$$
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Illustrer i samme figur disse indifferenskurver og bestem forbrugerens optimale forbrugskombination mellem de to perioder.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asd
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål d. 
+    Bestem hvor stor opsparingen er, samt hvilket afkast denne opsparing giver mellem periode 1 og periode 2
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål e. 
+    Bytteforholdet mellem forbrug i periode 1 og 2 er 26%, hvilket kan udtrykkes ved kapitalmarkedslinjen
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ C_2 = 142.80 - 1.26 \cdot C_1$$""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    Indtegn kapitalmarkedslinjen og bestem forbrugerens optimale forbrugskombination ud fra følgende indifferenskurve: 
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ I_4: C_2 = 8064 \cdot C_1^{-1} - 58.8$$""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asd
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål f: 
+    Bestem hvor meget forbrugeren vælger at låne i periode1, samt hvor meget dette lån betyder i mistet forbrugsmulighed i periode 2 og eftervis at den effektive låneomkostning svarer til bytteforholdet 26%
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål g. 
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Spørgsmål h.
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.10
+    Bestem den forventede inflation, hvis den nominelle rente er 8%, og realrenten er 3%.
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Svar: 
+    asd
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.11""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Opgave 1.12
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.13""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.14""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.15""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.16""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.17""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""### Spørgsmål a.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""### Spørgsmål b.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""### Spørgsmål c.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.18""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.19""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 1.20""")
     return
 
 
