@@ -14,8 +14,9 @@ def _(mo):
 def _():
     import marimo as mo
     import polars as pl
+    import numpy as np
     import matplotlib.pyplot as plt
-    return mo, pl, plt
+    return mo, np, pl, plt
 
 
 @app.cell(hide_code=True)
@@ -29,14 +30,14 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-    * Inflation
+    * Forbrugerenes valg mellem opsparing og forbrug i en simpel ligevægst model bestemmer renteniveauet. (Fishers intertemporale teori)
+    * Inflation påvirker den nominelle rente
     * Forventet fremtidig inflation
-    * Vækst økonomien og fremtidig vækst
-    *
+    * Økonomisk politik (finanspolitik og pengepolitik)
     """
     )
     return
@@ -53,9 +54,9 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Høj produtivitetstilvækst $\rightarrow$ høj rente""")
+    mo.md(r"""I Fishers intertemporale model vil øget produktivet skubbe produktionsmulighedskurven udaf. Det vil ikke ændre på forbrugerens præference men fører til øget forbrug i begge periode $\rightarrow$ ingen ændring i efterspørgsel og udbud af lån og dermed vil realrenten være uændret.""")
     return
 
 
@@ -70,7 +71,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(pl):
     data = {"Produkter": ["Anfordringsindskud", "Indskud på 3 måneders opsigelse", "Indskud på 12 måneders opsigelse",
                          "Obligationsrente, 1 år", "Obligationsrente, 3 år", "Obligationsrente, 5 år", "Obligationsrente, 10 år",
@@ -80,7 +81,7 @@ def _(pl):
     return (df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(df, plt):
     # Preserve order by taking lists directly from the DataFrame
     x = df["Produkter"].to_list()
@@ -98,7 +99,7 @@ def _(df, plt):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -109,12 +110,12 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     ### Svar:
-    Det skal man være varsom med, da den effektive rentesats er en slags aritmetisk gennemsnitsforrentning der ikke tager højde for forskelle i løbetider.
+    Ikke umiddelbart. Der er flere konventioner for hvordan den effektive rente beregnes. 1, Obligationsmarkedskonventionen $(1+R)^t-1$ samt, 2, pengemarkedskonventionen $(1+R\cdot t)-1$ og 3, en kontinuert beregningsmetode med løbende/kontinuert rentetilskrivning $e^{R\cdot t}-1$.
     """
     )
     return
@@ -131,22 +132,22 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     ### Svar:
     Den bliver højere. 
     Den kan ses af: 
-    $$\beta$$
+    $$(1+0.05/4)^{4}-1 = 0.051 > 0.05$$
     """
     )
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
-    R = (1+0.05/4)**(4)
+    R = (1+0.05/4)**(4) - 1
     print("Hvilket er lig med: ",R)
     return
 
@@ -162,18 +163,26 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     Svar:
-    $$r_d = \frac{r}{D}$$
+    $$r_d = \frac{r\cdot 100}{K}$$
+    hvor $r_d$ er den direkte rente, $r$ er pålydende og $K$ er kurs.
     """
     )
     return
 
 
 @app.cell
+def _():
+    r_d = 7*100/105
+    print(f"{r_d:.2f}%")
+    return (r_d,)
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -184,18 +193,33 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     ### Svar: 
-    asdas
+    Effektiv rente er lig direkte rente plus kursregulering
+    $E = r_d + v$
     """
     )
     return
 
 
 @app.cell
+def _(r_d):
+    v = (100 - 105)/105
+    e = r_d + v
+    print(f"{e:.2f}%")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Den effektive rente er lavere end den direkte rente pga kursreguleringen.""")
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -238,7 +262,7 @@ def _(mo):
     mo.md(
         r"""
     ### Spørgsmål a.
-    Økonomiens produktionsmulighedskurve er givet ved: 
+    Økonomiens produktionsmulighedskurve er givet ved:
     """
     )
     return
@@ -258,12 +282,28 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    ### Svar: 
-    asd
-    """
-    )
+    mo.md(r"""### Svar: """)
+    return
+
+
+@app.cell
+def _(np):
+    c1 = np.linspace(-110, 110, 1000)
+    c2 = 105 - 0.0105 * c1**2
+    return c1, c2
+
+
+@app.cell
+def _(c1, c2, plt):
+    # Create the plot
+    plt.figure()
+    plt.plot(c1, c2, label=r"$C_2 = 105 - 0.0105\,C_1^2$")
+    plt.xlabel(r"$C_1$")
+    plt.ylabel(r"$C_2$")
+    plt.title(r"Plot of $C_2 = 105 - 0.0105\,C_1^2$")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
     return
 
 
@@ -280,12 +320,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    ### Svar: 
-    asd
-    """
-    )
+    mo.md(r"""### Svar: """)
     return
 
 
@@ -294,7 +329,7 @@ def _(mo):
     mo.md(
         r"""
     ### Spørgsmål c.
-    Forbrugerens indifferenskurvesæt kan repræsenteres ved følgende tre funktioner: 
+    Forbrugerens indifferenskurvesæt kan repræsenteres ved følgende tre funktioner:
     """
     )
     return
@@ -346,7 +381,6 @@ def _(mo):
         r"""
     ### Spørgsmål e. 
     Bytteforholdet mellem forbrug i periode 1 og 2 er 26%, hvilket kan udtrykkes ved kapitalmarkedslinjen
-
     """
     )
     return
@@ -360,12 +394,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    Indtegn kapitalmarkedslinjen og bestem forbrugerens optimale forbrugskombination ud fra følgende indifferenskurve: 
-
-    """
-    )
+    mo.md(r"""Indtegn kapitalmarkedslinjen og bestem forbrugerens optimale forbrugskombination ud fra følgende indifferenskurve:""")
     return
 
 
@@ -399,23 +428,13 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    ### Spørgsmål g. 
-
-    """
-    )
+    mo.md(r"""### Spørgsmål g.""")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    ### Spørgsmål h.
-
-    """
-    )
+    mo.md(r"""### Spørgsmål h.""")
     return
 
 
@@ -449,12 +468,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    ## Opgave 1.12
-
-    """
-    )
+    mo.md(r"""## Opgave 1.12""")
     return
 
 
