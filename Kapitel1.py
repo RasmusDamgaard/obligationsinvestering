@@ -152,7 +152,7 @@ def _():
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -282,13 +282,13 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Svar: """)
+    mo.md(r"""### Svar:""")
     return
 
 
 @app.cell
 def _(np):
-    c1 = np.linspace(-110, 110, 1000)
+    c1 = np.linspace(0.1, 100, 1000)
     c2 = 105 - 0.0105 * c1**2
     return c1, c2
 
@@ -320,7 +320,44 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Svar: """)
+    mo.md(r"""### Svar:""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    $$C_2=0 \Rightarrow 105 =0.0105\cdot C_1^2 \\
+    C_1 = \sqrt\frac{105}{0.0105} = 100 = Y_1$$
+    """
+    )
+    return
+
+
+@app.cell
+def _(np):
+    Y_1 = np.sqrt(105/0.0105)
+    print(Y_1)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ C_1 = 0 \Rightarrow C_2 = 105 = Y_2$$""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ g = \frac{Y_2-Y_1}{Y_1} = 0.05$$""")
+    return
+
+
+@app.cell
+def _():
+    g = (105-100)/100
+    print(g)
     return
 
 
@@ -353,14 +390,55 @@ def _(mo):
     return
 
 
+@app.cell
+def _(c1, np):
+    # For the hyperbolas, avoid |C1| < 1 to keep values finite and readable
+    mask = np.abs(c1) >= 1
+    c1_hyp = c1[mask]
+
+    I1 = 3536 * (c1_hyp**-1) - 8.4
+    I2 = 4536 * (c1_hyp**-1) - 8.4
+    I3 = 5536 * (c1_hyp**-1) - 8.4
+    return I1, I2, I3, c1_hyp
+
+
+@app.cell
+def _(I1, I2, I3, c1, c1_hyp, c2, plt):
+    plt.figure()
+
+    # Plot parabola
+    plt.plot(c1, c2, label=r"$C_2 = 105 - 0.0105\,C_1^2$")
+    plt.plot(c1_hyp, I1, label=r"$I_1 = 3536\,C_1^{-1} - 8.4$")
+    plt.plot(c1_hyp, I2, label=r"$I_2 = 4536\,C_1^{-1} - 8.4$")
+    plt.plot(c1_hyp, I3, label=r"$I_3 = 5536\,C_1^{-1} - 8.4$")
+    # Optional: show the vertical asymptote at C1 = 0
+    plt.axvline(0, linestyle="--", linewidth=1)
+
+    plt.xlabel(r"$C_1$")
+    plt.ylabel(r"$C_2$ / $I$")
+    plt.title(r"Parabola with Added Hyperbolas")
+    plt.grid(True)
+    plt.legend()
+    plt.ylim(0, 150)
+    plt.xlim(0, 110)
+    plt.show()
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     ### Svar: 
-    asd
+    Find rødderne i tredjegradsligningen:
     """
     )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""$$ 105 - 0.0105\cdot C_1^2 = 4536C_1^{-1} - 8.4$$""")
     return
 
 
