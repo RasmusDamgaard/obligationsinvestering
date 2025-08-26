@@ -691,7 +691,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Forbrugeren låner til ekstra forbrug på 20 i periode 1 på bekostning af et forbrug på 25.2 i periode 2. Det giver en effektiv rente på: """)
+    mo.md(r"""Forbrugeren låner til ekstra forbrug på 20 i periode 1 på bekostning af et forbrug på 25.2 i periode 2. Det giver en effektiv rente på:""")
     return
 
 
@@ -786,7 +786,7 @@ def _(mo):
     mo.md(
         r"""
     ### Spørgsmål h.
-    Kommenter forbrugerens reaktion på rentefaldet og illustrer hans efterspørgselskurve for låntagning som funktion af renten, hvis det forudsættes, at der er tale om en linær funktion og bestem ligevægtsrenten, når udbudskurven forlångivning er givet ved: 
+    Kommenter forbrugerens reaktion på rentefaldet og illustrer hans efterspørgselskurve for låntagning som funktion af renten, hvis det forudsættes, at der er tale om en linær funktion og bestem ligevægtsrenten, når udbudskurven forlångivning er givet ved:
     """
     )
     return
@@ -846,7 +846,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Svar: """)
+    mo.md(r"""### Svar:""")
     return
 
 
@@ -925,9 +925,35 @@ def _(mo):
     return
 
 
+@app.cell
+def _():
+    r_disp = (0.03+0.05+0.03*0.05)*(1-0.34)-0.05
+    r_disp
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    $$
+    r_{disponibel} = R\cdot (1-\tau) - \pi
+    $$
+    """
+    )
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 1.14""")
+    return
+
+
+@app.cell
+def _():
+    r_disp2 = (0.03+0.04+0.03*0.04)*(1-0.34)-0.04
+    r_disp2
     return
 
 
@@ -937,9 +963,32 @@ def _(mo):
     return
 
 
+@app.cell
+def _():
+    1/0.66
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 1.16""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    $$
+    R_{DK}=R_W + (\pi_{DK} - \pi_w)$$
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""Så spreaded er 1% point.""")
     return
 
 
@@ -957,7 +1006,83 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
+    mo.md(
+        r"""
+    $$
+    P_e:L=625-25\cdot R \\
+    P_u: L=500mia.
+    $$
+    """
+    )
+    return
+
+
+@app.cell
+def _(np, plt):
+    # Curves
+    Ri = np.linspace(0, 10, 200)     # Nominal interest rate in percent
+    L_d = 625 - 25 * Ri              # Money demand P_e: L = 625 - 25·R
+    L_s = np.full_like(Ri, 500)      # Money supply P_u: L = 500 (mia.)
+
+    # Equilibrium (where demand = supply)
+    R_eq = (625 - 500) / 25         # 5%
+    L_eq = 500
+
+    # Plot
+    plt.figure()
+    plt.plot(Ri, L_d, label='Money demand: L = 625 - 25·R')
+    plt.plot(Ri, L_s, label='Money supply: L = 500')
+    plt.scatter([R_eq], [L_eq], zorder=3,
+                label=f'Equilibrium (R={R_eq:.1f}%, L={L_eq:.0f} mia.)')
+    plt.axvline(R_eq, linestyle='--', linewidth=1)
+    plt.axhline(L_eq, linestyle='--', linewidth=1)
+
+    plt.title('Money Market: Demand and Supply')
+    plt.xlabel('Nominal interest rate R (%)')
+    plt.ylabel('Money L (mia.)')
+    plt.grid(True)
+    plt.legend()
+    plt.xlim(Ri.min(), Ri.max())
+    plt.ylim(min(L_d.min(), L_s.min()) - 10, max(L_d.max(), L_s.max()) + 10)
+    plt.show()
+
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
     mo.md(r"""### Spørgsmål b.""")
+    return
+
+
+@app.cell
+def _(np, plt):
+    # Curves
+    Ri2 = np.linspace(0, 10, 200)     # Nominal interest rate in percent
+    L_d2 = 625 - 25 * Ri2              # Money demand P_e: L = 625 - 25·R
+    L_s2 = np.full_like(Ri2, 400)      # Money supply P_u: L = 500 (mia.)
+
+    # Equilibrium (where demand = supply)
+    R_eq2 = (625 - 400) / 25         # 5%
+    L_eq2 = 400
+
+    # Plot
+    plt.figure()
+    plt.plot(Ri2, L_d2, label='Money demand: L = 625 - 25·R')
+    plt.plot(Ri2, L_s2, label='Money supply: L = 400')
+    plt.scatter([R_eq2], [L_eq2], zorder=3,
+                label=f'Equilibrium (R={R_eq2:.1f}%, L={L_eq2:.0f} mia.)')
+    plt.axvline(R_eq2, linestyle='--', linewidth=1)
+    plt.axhline(L_eq2, linestyle='--', linewidth=1)
+
+    plt.title('Money Market: Demand and Supply')
+    plt.xlabel('Nominal interest rate R (%)')
+    plt.ylabel('Money L (mia.)')
+    plt.grid(True)
+    plt.legend()
+    plt.xlim(Ri2.min(), Ri2.max())
+    plt.ylim(min(L_d2.min(), L_s2.min()) - 10, max(L_d2.max(), L_s2.max()) + 10)
+    plt.show()
     return
 
 
@@ -967,9 +1092,45 @@ def _(mo):
     return
 
 
+@app.cell
+def _(np, plt):
+    # Curves
+    Ri3 = np.linspace(0, 10, 200)     # Nominal interest rate in percent
+    L_d3 = 525 - 25 * Ri3              # Money demand P_e: L = 525 - 25·R
+    L_s3 = np.full_like(Ri3, 400)      # Money supply P_u: L = 400 (mia.)
+
+    # Equilibrium (where demand = supply)
+    R_eq3 = (525 - 400) / 25         
+    L_eq3 = 400
+
+    # Plot
+    plt.figure()
+    plt.plot(Ri3, L_d3, label='Money demand: L = 525 - 25·R')
+    plt.plot(Ri3, L_s3, label='Money supply: L = 400')
+    plt.scatter([R_eq3], [L_eq3], zorder=3,
+                label=f'Equilibrium (R={R_eq3:.1f}%, L={L_eq3:.0f} mia.)')
+    plt.axvline(R_eq3, linestyle='--', linewidth=1)
+    plt.axhline(L_eq3, linestyle='--', linewidth=1)
+
+    plt.title('Money Market: Demand and Supply')
+    plt.xlabel('Nominal interest rate R (%)')
+    plt.ylabel('Money L (mia.)')
+    plt.grid(True)
+    plt.legend()
+    plt.xlim(Ri3.min(), Ri3.max())
+    plt.ylim(min(L_d3.min(), L_s3.min()) - 10, max(L_d3.max(), L_s3.max()) + 10)
+    plt.show()
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 1.18""")
+    return
+
+
+@app.cell
+def _():
     return
 
 
