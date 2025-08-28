@@ -1130,7 +1130,8 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(mo):
+    mo.md(r"""det afhænger af inflationen. så uklart. $m+h = p+q$""")
     return
 
 
@@ -1142,7 +1143,19 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
+    mo.md(r"""Når de korte renter går fra at være højere/lavere end de lange renter så rentekurvens hældning skifter fortegn.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
     mo.md(r"""## Opgave 1.20""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Svag efficiens kun historisk information. Semi-stærk efficiens historisk og offentlig info. Stærk historisk, offentlig og private info. I praksis nok semi.""")
     return
 
 

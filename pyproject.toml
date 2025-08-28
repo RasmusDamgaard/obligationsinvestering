@@ -8,4 +8,5 @@ dependencies = [
     "marimo>=0.14.15",
     "matplotlib>=3.10.5",
     "polars>=1.32.2",
+    "seaborn>=0.13.2",
 ]
