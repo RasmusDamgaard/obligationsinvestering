@@ -155,10 +155,10 @@ def _(mo):
 
 @app.cell
 def _():
-    H = 100 # hovedstol
-    n = 5 # løbetid i år
-    R = 0.06 # kuponrente
-    return H, R
+    H_a = 100 # hovedstol
+    n_a = 5 # løbetid i år
+    R_a = 0.06 # kuponrente
+    return H_a, R_a, n_a
 
 
 @app.function
@@ -168,6 +168,38 @@ def alfahage(R,n):
     """
     alfahage = (1-(1+R)**(-n))/R
     return alfahage
+
+
+@app.function
+def annuity_installment(H,R,n,t):
+    """
+    Afdrag i annuitet
+    """
+    installment_a = (1+R)**(-1*(n+1-t))*H
+    return installment_a
+
+
+@app.cell
+def _(H_a, R_a, n_a, pl):
+    annuity_loan = (
+        pl.DataFrame({"t": range(1, 6)})
+        .with_columns(
+            Restgæld = alfahage(R_a,(n_a - pl.col("t"))) / alfahage(R_a, n_a),
+            Afdrag = annuity_installment(H_a,R_a,n_a,pl.col("t")),
+        )
+        .with_columns(Rente = pl.col("Restgæld") * R_a)
+        .with_columns(
+            Ydelse = H_a / alfahage(R_a,n_a),
+            Ydelse_sanity = pl.col("Afdrag") + pl.col("Rente")
+        )
+    )
+    return (annuity_loan,)
+
+
+@app.cell
+def _(annuity_loan):
+    annuity_loan
+    return
 
 
 @app.cell
