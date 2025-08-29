@@ -9,7 +9,8 @@ def _():
     import marimo as mo
     import polars as pl
     import seaborn as sns
-    return mo, pl, sns
+    from scipy.optimize import root_scalar
+    return mo, pl, root_scalar, sns
 
 
 @app.cell(hide_code=True)
@@ -181,30 +182,57 @@ def annuity_installment(H,R,n,t):
 
 @app.cell
 def _(H_a, R_a, n_a, pl):
-    annuity_loan = (
-        pl.DataFrame({"t": range(1, 6)})
-        .with_columns(
-            Restgæld = alfahage(R_a,(n_a - pl.col("t"))) / alfahage(R_a, n_a),
-            Afdrag = annuity_installment(H_a,R_a,n_a,pl.col("t")),
+    def annuity_loan(H,R,n):
+        annuity_loan = (
+            pl.DataFrame({"t": range(1, n_a + 1)})
+            .with_columns(
+                Ydelse = H_a / alfahage(R_a,n_a),
+            )
+            .with_columns(
+                Restgæld = pl.col("Ydelse")*alfahage(R_a, n_a + 1 - pl.col("t"))
+            )
+            .with_columns(
+                Rente = pl.col("Restgæld") * R_a
+            )
+            .with_columns(
+                Afdrag = pl.col("Ydelse") - pl.col("Rente")
+            )
+        
         )
-        .with_columns(Rente = pl.col("Restgæld") * R_a)
-        .with_columns(
-            Ydelse = H_a / alfahage(R_a,n_a),
-            Ydelse_sanity = pl.col("Afdrag") + pl.col("Rente")
-        )
-    )
+        return annuity_loan
     return (annuity_loan,)
 
 
 @app.cell
-def _(annuity_loan):
-    annuity_loan
+def _(H_a, R_a, annuity_loan, n_a):
+    ann_loan = annuity_loan(H_a,R_a,n_a)
+    ann_loan
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 2.5""")
     return
 
 
 @app.cell
-def _(mo):
-    mo.md(r"""## Opgave 2.5""")
+def _():
+    k0 = 0.98
+    K = k0 * alfahage(R=0.06,n=5)
+    K
+    return (K,)
+
+
+@app.cell
+def _(K, root_scalar):
+    # use scipy
+    def g(x):
+        return (1 - (1 + x)**(-5)) / x - K
+
+    sol = root_scalar(g, bracket=(1e-9, 1.0), method='brentq')
+    print(sol.root)  # ≈ 0.067470596505053
+
     return
 
 
