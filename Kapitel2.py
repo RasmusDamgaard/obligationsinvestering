@@ -9,9 +9,10 @@ def _():
     import marimo as mo
     import polars as pl
     import seaborn as sns
+    import numpy as np
     from datetime import date
     from scipy.optimize import root_scalar
-    return date, mo, pl, root_scalar, sns
+    return date, mo, np, pl, root_scalar, sns
 
 
 @app.cell(hide_code=True)
@@ -293,7 +294,7 @@ def _(mo):
 
 @app.function
 def serie_kurs(R,R_tilde,n):
-    k = R/R_tilde + (1- R/R_tilde)*(1+R_tilde)**(-n)
+    k = R/R_tilde + 1/n*(1- R/R_tilde)*alfahage(R=R_tilde, n=n)
     return k
 
 
@@ -459,10 +460,16 @@ def _():
 
 
 @app.cell
-def _(k212, n212, r212, root_scalar):
+def _(k212, v212):
+    k_plus_v = k212 + v212
+    return (k_plus_v,)
+
+
+@app.cell
+def _(k_plus_v, n212, r212, root_scalar):
     sol_stand212 = root_scalar(
         s_stand,
-        args=(r212, k212, n212),
+        args=(r212, k_plus_v, n212),
         method='newton',
         maxiter=1000,
         x0=0.05,
@@ -576,36 +583,243 @@ def _(mo):
 
 @app.cell
 def _():
+    r_stand214 = 0.06
+    r_kurs214 = 0.99
+    n_214 = 3
+    # stående lån
+    return
+
+
+@app.function
+def obligationskonvention(x):
+    return 6/(1+x) + 6/(1+x)**2 + 106/(1+x)**3 - 99
+
+
+@app.cell
+def _(root_scalar):
+    sol_obl_konv = root_scalar(
+        obligationskonvention,
+        method='newton',
+        maxiter=1000,
+        x0=0.05,
+    )
+    obl_konv_sol= print(sol_obl_konv.root)
+    return
+
+
+@app.function
+def pengemarkedskonventionen(x):
+    return 6/(1+x) + 6/(1+(x*2)) + 106/(1+(x*3)) - 99
+
+
+@app.cell
+def _(root_scalar):
+    sol_peng_konv = root_scalar(
+        pengemarkedskonventionen,
+        method='newton',
+        maxiter=1000,
+        x0=0.05,
+    )
+    obl_peng_sol= print(sol_peng_konv.root)
     return
 
 
 @app.cell
+def _(np):
+    def kontinuert_rentetilskrivning(x):
+        return 6*np.exp(-x) + 6*np.exp(-x*2) + 106*np.exp(-x*3) - 99
+    return (kontinuert_rentetilskrivning,)
+
+
+@app.cell
+def _(kontinuert_rentetilskrivning, root_scalar):
+    sol_kont_konv = root_scalar(
+        kontinuert_rentetilskrivning,
+        method='newton',
+        maxiter=1000,
+        x0=0.05,
+    )
+    obl_kont_sol= print(sol_kont_konv.root)
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 2.15""")
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Spørgsmål A)""")
+    return
+
+
 @app.cell
+def _(pl):
+    data215 = [
+        pl.Series("Navn", ["5% St.lån", "7% Serielån", "6% Annuitetslån"]),
+        pl.Series("Løbetid", [6,2,4]),
+        pl.Series("Nominelt", [1000, 1500, 500]),
+        pl.Series("Kurs", [0.98, 1.02, 1]),
+        pl.Series("Effektiv rente", [0.054, 0.0557, 0.06]),
+        pl.Series("Varighed", [5.32, 1.47, 2.43])
+    ]
+    portefølje = pl.DataFrame(data215).with_columns(
+        Inv_beløb = pl.col("Nominelt")*pl.col("Kurs")
+    ).with_columns(
+        inv_r_dur = pl.col("Inv_beløb")*pl.col("Effektiv rente")*pl.col("Varighed"),
+        inv_dur = pl.col("Inv_beløb")*pl.col("Varighed")
+    )
+    return (portefølje,)
+
+
+@app.function
+def sumbetalingsrække(x):
+    return 1049.295746/(1+x) + 996.7957462/(1+x)**2 + 194.2957462/(1+x)**3 + 194.2957462/(1+x)**4 + 50/(1+x)**5 + 1050/(1+x)**6 -3010
+
+
+@app.cell
+def _(root_scalar):
+    sum_betaling = root_scalar(
+        sumbetalingsrække,
+        method='newton',
+        maxiter=1000,
+        x0=0.05,
+    )
+    sum_betaling_sol= print(sum_betaling.root)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Spørgsmål B)""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Hvis man istedet beregninger porteføljens effektive rente som et kursværdivægtet gennemsnit begår man den fejl, at dette gennemsnit ikke vil tage højde for de forskellige typers låns forskellige cashflow. Betalingerne falder forskelligt for de forskellige låntyper. Det vil en gennemsnitsrente ikke fange. I stedet kan man vægte hver obligations effektive rente med obligationens varighed som approksimaiton.""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Spørgsmål C)""")
+    return
+
+
+@app.cell
+def _(portefølje):
+    inv_r_dur = portefølje["inv_r_dur"].sum()
+    inv_dur = portefølje["inv_dur"].sum()
+    portefølje_effektiv_r = inv_r_dur / inv_dur
+    return (portefølje_effektiv_r,)
+
+
+@app.cell
+def _(portefølje_effektiv_r):
+    portefølje_effektiv_r
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 2.16""")
     return
 
 
 @app.cell
+def _():
+    # bestem kurs serielån (helårlige terminer)
+    s_kupon = 0.07
+    s_n = 6
+    s_r_tilde = 0.06
+    return s_kupon, s_n, s_r_tilde
+
+
+@app.cell
+def _(s_kupon, s_n, s_r_tilde):
+    s_kurs = serie_kurs(s_kupon, s_r_tilde, s_n)
+    s_kurs
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 2.17""")
     return
 
 
 @app.cell
+def _():
+    # bestem kurs stående lån (helårlige terminer)
+    stående_kupon = 0.07
+    stående_n = 6
+    stående_r_tilde = 0.06
+    return stående_kupon, stående_n, stående_r_tilde
+
+
+@app.function
+def stående_kurs(Rs, Rs_tilde, sn):
+    return Rs/Rs_tilde + (1 - Rs/Rs_tilde)*(1+Rs_tilde)**(-sn)
+
+
+@app.cell
+def _(stående_kupon, stående_n, stående_r_tilde):
+    stående_k = stående_kurs(stående_kupon, stående_r_tilde, stående_n)
+    stående_k
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 2.18""")
     return
 
 
 @app.cell
+def _():
+    # annuitet
+    ann_kupon = 0.07
+    ann_n = 6
+    ann_r_tilde = 0.06
+    return ann_kupon, ann_n, ann_r_tilde
+
+
+@app.cell
+def _(ann_kupon, ann_n, ann_r_tilde):
+    ann_kurs = alfahage(R=ann_r_tilde, n=ann_n) / alfahage(R=ann_kupon, n=ann_n)
+    ann_kurs
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 2.19""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    De væsentligste svagheder ved den effektive rente er: 
+
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    * Der antages (ifølge obligationsmarkedskonventionen) at alle fremtidige betalinger kan geninvesteres til den samme effektive rente, hvilket sjældent er tilfældet i virkeligheden.
+    * Den effektive rente tager ikke hensyn til den enkelte obligations afdragsprofil. Det medfører at man ikke kan sammenligne effektive rentesatser for serielån, stående lån og annuitetslån (hvilket implicit ville forudsætte en flad rentestruktur).
+    * Usikkerhed om fremtidig genplaceringsrente betyder at den effektive rente ikke er et entydigt afkastbegreb. Og man kan derfor ikke være garanteret den effektive rente som afkast hvis man holder obligationen til udløb.
+    """
+    )
     return
 
 
