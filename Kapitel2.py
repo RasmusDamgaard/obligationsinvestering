@@ -802,12 +802,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    De væsentligste svagheder ved den effektive rente er: 
-
-    """
-    )
+    mo.md(r"""De væsentligste svagheder ved den effektive rente er:""")
     return
 
 
