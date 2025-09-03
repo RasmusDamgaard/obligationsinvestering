@@ -178,8 +178,8 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    * asd
-    * asd
+    * Udtryk for en obligations eller en portefølje af obligationers gennemsnitlige restløbetid
+    * 
     * asd
     """
     )
