@@ -478,6 +478,96 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""kuponrente 3%""")
+    return
+
+
+@app.cell
+def _():
+    series39 = dur_seriesloan(i=0.04, R=0.03, N=5)
+    annuity39 = dur_annuity(i=0.04, N=5)
+    standing39 = dur_standingloan(i=0.04, R=0.03, N=5)
+    return annuity39, series39, standing39
+
+
+@app.cell
+def _(annuity39, series39, standing39):
+    print("Varighed for serielån:", series39)
+    print("varighed for annuitet:", annuity39)
+    print("Varighed for stående lån:", standing39)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 3.10""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""restløbetid på 3 år istedet""")
+    return
+
+
+@app.cell
+def _():
+    series310 = dur_seriesloan(i=0.04, R=0.05, N=3)
+    annuity310 = dur_annuity(i=0.04, N=3)
+    standing310 = dur_standingloan(i=0.04, R=0.05, N=3)
+    return annuity310, series310, standing310
+
+
+@app.cell
+def _(annuity310, series310, standing310):
+    print("Varighed for serielån:", series310)
+    print("varighed for annuitet:", annuity310)
+    print("Varighed for stående lån:", standing310)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 3.11""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""effektiv rente på 6% i stedet""")
+    return
+
+
+@app.cell
+def _():
+    series311 = dur_seriesloan(i=0.06, R=0.05, N=5)
+    annuity311 = dur_annuity(i=0.06, N=5)
+    standing311 = dur_standingloan(i=0.06, R=0.05, N=5)
+    return annuity311, series311, standing311
+
+
+@app.cell
+def _(annuity311, series311, standing311):
+    print("Varighed for serielån:", series311)
+    print("varighed for annuitet:", annuity311)
+    print("Varighed for stående lån:", standing311)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""varigheden falder""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 3.12""")
+    return
+
+
 @app.cell
 def _():
     return
