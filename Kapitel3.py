@@ -209,7 +209,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Varighedsbegrebet har forskellige fortolkninger:""")
+    mo.md(r"""Varighedsbegrebet har 3 forskellige fortolkninger:""")
     return
 
 
@@ -219,6 +219,7 @@ def _(mo):
         r"""
     * Udtryk for en obligations eller en portefølje af obligationers gennemsnitlige restløbetid
     * Den procentvise ændring i kursen på en obligation for en ændring på 1% i renten
+    * Varighedsimmunisering: varigheden er et udtryk for hvor lang tid det vil tage før kurstabet ved en rentestigning afbalanceres af det højere renteafkast af genplaceringerne.
     """
     )
     return
@@ -366,6 +367,114 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Opgave 3.8""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Ved en effektiv rente på 4% bestem varigheden for følgende:""")
+    return
+
+
+@app.cell
+def _():
+    # 5% 5årigt serielån
+    return
+
+
+@app.function
+def alfahage(R,n):
+    """
+    Alfahage
+    """
+    return (1-(1+R)**(-n))/R
+
+
+@app.function
+def kurs_t_seriesloan(R, R_tilde, n, t):
+    """
+    Returnerer kursen i periode t for et serielån
+    """
+    k_t = R/R_tilde + (1/(n-t))*(1-R/R_tilde)*alfahage(R=R_tilde, n=(n-t))
+    return k_t
+
+
+@app.function
+def dur_seriesloan(i, R, N):
+    """
+    Formel 3.8
+    i: effektiv rente
+    R: kupon rente
+    N: perioder
+    """
+    num = (R/i)*(1-(1+i)**(-N)) + N*(i-R)*(1+i)**(-(N+1))
+    denom = N*R + (1-(R/i))*(1-(1+i)**(-N))
+    frac = num/denom
+    V = (1+i)/i * (1 - frac)
+    return V
+
+
+@app.cell
+def _():
+    series38_dur = dur_seriesloan(0.04, 0.05, 5)
+    series38_dur
+    return
+
+
+@app.function
+def dur_annuity(i, N):
+    """
+    formel 3.10
+    """
+    return (1+i)/i - N/((1+i)**N - 1)
+
+
+@app.cell
+def _():
+    annuity38_dur = dur_annuity(0.04, 5)
+    annuity38_dur
+    return
+
+
+@app.function
+def dur_standingloan(i, R, N):
+    """
+    formel 3.9
+    """
+    num = (1+i) - N*(i-R)
+    denom = R*(1+i)**N + (i-R)
+    frac = num/denom
+    return (1+i)/i - frac
+
+
+@app.cell
+def _():
+    standing38_dur = dur_standingloan(0.04, 0.05, 5)
+    standing38_dur
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Varighed på 5 årig nulkupon obligation er  V = 5. Vi har derfor at:""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    $$
+    V_{serielån} < V_{annuitet} < V_{stående} < V_{nulkupon}
+    $$
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Opgave 3.9""")
     return
 
 
